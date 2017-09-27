@@ -1,8 +1,6 @@
-package com.example.kirandeep.phoneutilization;
+package com.example.kirandeep.phoneutilization.networkConnection;
 
 import android.util.Log;
-
-import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;

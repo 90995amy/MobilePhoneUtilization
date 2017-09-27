@@ -1,4 +1,4 @@
-package com.example.kirandeep.phoneutilization;
+package com.example.kirandeep.phoneutilization.networkConnection;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -1,4 +1,4 @@
-package com.example.kirandeep.phoneutilization;
+package com.example.kirandeep.phoneutilization.networkConnection;
 
 import android.os.AsyncTask;
 

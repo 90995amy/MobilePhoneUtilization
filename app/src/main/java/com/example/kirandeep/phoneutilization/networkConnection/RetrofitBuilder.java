@@ -1,4 +1,4 @@
-package com.example.kirandeep.phoneutilization;
+package com.example.kirandeep.phoneutilization.networkConnection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

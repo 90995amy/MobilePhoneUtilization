@@ -1,4 +1,4 @@
-package com.example.kirandeep.phoneutilization;
+package com.example.kirandeep.phoneutilization.networkConnection;
 
 /**
  * Created by abc on 13-09-2017.
