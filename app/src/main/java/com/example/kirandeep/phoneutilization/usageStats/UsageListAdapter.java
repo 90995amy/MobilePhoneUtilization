@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirandeep.phoneutilization.R;
+import com.example.kirandeep.phoneutilization.localStorage.StatsModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by abc on 27-09-2017.
@@ -69,9 +72,52 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         viewHolder.getPackageName().setText(
                 mCustomUsageStatsList.get(position).usageStats.getPackageName());
-        long lastTimeUsed = mCustomUsageStatsList.get(position).usageStats.getLastTimeUsed();
+        final long lastTimeUsed = mCustomUsageStatsList.get(position).usageStats.getLastTimeUsed();
         viewHolder.getLastTimeUsed().setText(mDateFormat.format(new Date(lastTimeUsed)));
         viewHolder.getAppIcon().setImageDrawable(mCustomUsageStatsList.get(position).appIcon);
+
+        updateLocalDb(mCustomUsageStatsList);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void updateLocalDb(final List<CustomUsageStats> mCustomUsageStatsList) {
+        final StatsModel statsModel = new StatsModel();
+        Realm realm = Realm.getDefaultInstance();
+        for (final CustomUsageStats customUsageStats : mCustomUsageStatsList){
+            if(realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()) == null){
+                realm.executeTransaction(new Realm.Transaction() {
+
+                    @Override
+                    public void execute(Realm realm) {
+                        statsModel.setPackageName(customUsageStats.usageStats.getPackageName());
+                        statsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
+                        statsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
+                        statsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
+                        statsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
+                    }
+                });
+            }
+            else
+            {
+                final StatsModel oldStatsModel = realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()).findFirst();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+                        oldStatsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
+                        oldStatsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
+                        oldStatsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
+                        oldStatsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
+                    }
+                });
+
+
+
+            }
+
+        }
+
     }
 
     @Override
