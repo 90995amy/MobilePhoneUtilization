@@ -25,6 +25,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.example.kirandeep.phoneutilization.R;
+import com.example.kirandeep.phoneutilization.localStorage.QueryRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +44,7 @@ public class AppUsageStatisticsFragment extends Fragment {
     RecyclerView.LayoutManager mLayoutManager;
     Button mOpenUsageSettingButton;
     Spinner mSpinner;
+    QueryRepository mQueryRepository;
 
     /**
      * Use this factory method to create a new instance of
@@ -101,7 +103,10 @@ public class AppUsageStatisticsFragment extends Fragment {
                             getUsageStatistics(statsUsageInterval.mInterval);
                     Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
                     updateAppsList(usageStatsList);
-                }
+                    mQueryRepository = new QueryRepository();
+                    ArrayList temp = mQueryRepository.getAllStats();
+                    Log.i("Data",temp.isEmpty() ? "Empty": temp.toString());
+            }
             }
 
             @Override

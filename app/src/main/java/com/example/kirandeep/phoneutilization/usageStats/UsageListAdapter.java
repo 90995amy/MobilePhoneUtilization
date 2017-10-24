@@ -3,6 +3,7 @@ package com.example.kirandeep.phoneutilization.usageStats;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirandeep.phoneutilization.R;
+import com.example.kirandeep.phoneutilization.localStorage.QueryRepository;
 import com.example.kirandeep.phoneutilization.localStorage.StatsModel;
 
 import java.text.DateFormat;
@@ -97,21 +99,28 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
                         statsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
                     }
                 });
+                Log.i("New Entry", statsModel.getPackageName());
             }
             else
             {
-                final StatsModel oldStatsModel = realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()).findFirst();
+                final StatsModel oldStatsModel = new StatsModel();
+                oldStatsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
+                oldStatsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
+                oldStatsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
+                oldStatsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
+                oldStatsModel.setPackageName(customUsageStats.usageStats.getPackageName());
+                //realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()).findFirst();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
-                        oldStatsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
-                        oldStatsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
-                        oldStatsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
-                        oldStatsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
+                        realm.copyToRealmOrUpdate(oldStatsModel);
                     }
                 });
+                Log.i("Update", oldStatsModel.getPackageName());
 
+                QueryRepository m = new QueryRepository();
+                Log.i("Committed", m.getAllStats().toString());
 
 
             }
