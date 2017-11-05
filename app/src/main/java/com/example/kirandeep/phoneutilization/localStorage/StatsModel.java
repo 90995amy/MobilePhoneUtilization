@@ -9,59 +9,59 @@ import io.realm.annotations.PrimaryKey;
 
 public class StatsModel extends RealmObject{
 
-    private String phoneId;
+    private String deviceId;
     @PrimaryKey
-    private String packageName;
-    private long lastTimeUsed;
-    private long firstTimestamp;
-    private long lastTimestamp;
-    private long totalTimeInForeground;
+    private String appName;
+    private String lastTimeUsed;
+    private String firstTimestamp;
+    private String lastTimestamp;
+    private String totalTimeInForeground;
 
-    public String getPhoneId() {
-        return phoneId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setPhoneId(String phoneId) {
-        this.phoneId = phoneId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public String getPackageName() {
-        return packageName;
+    public String getAppName() {
+        return appName;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
-    public long getLastTimeUsed() {
+    public String getLastTimeUsed() {
         return lastTimeUsed;
     }
 
-    public void setLastTimeUsed(long lastTimeUsed) {
+    public void setLastTimeUsed(String lastTimeUsed) {
         this.lastTimeUsed = lastTimeUsed;
     }
 
-    public long getFirstTimestamp() {
+    public String getFirstTimestamp() {
         return firstTimestamp;
     }
 
-    public void setFirstTimestamp(long firstTimestamp) {
+    public void setFirstTimestamp(String firstTimestamp) {
         this.firstTimestamp = firstTimestamp;
     }
 
-    public long getLastTimestamp() {
+    public String getLastTimestamp() {
         return lastTimestamp;
     }
 
-    public void setLastTimestamp(long lastTimestamp) {
+    public void setLastTimestamp(String lastTimestamp) {
         this.lastTimestamp = lastTimestamp;
     }
 
-    public long getTotalTimeInForeground() {
+    public String getTotalTimeInForeground() {
         return totalTimeInForeground;
     }
 
-    public void setTotalTimeInForeground(long totalTimeInForeground) {
+    public void setTotalTimeInForeground(String totalTimeInForeground) {
         this.totalTimeInForeground = totalTimeInForeground;
     }
 }

@@ -79,7 +79,7 @@ public class AppUsageStatisticsFragment extends Fragment {
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
 
-        mUsageListAdapter = new UsageListAdapter();
+        mUsageListAdapter = new UsageListAdapter(getActivity().getApplicationContext());
         mRecyclerView = rootView.findViewById(R.id.recyclerview_app_usage);
         mLayoutManager = mRecyclerView.getLayoutManager();
         mRecyclerView.scrollToPosition(0);
@@ -114,6 +114,8 @@ public class AppUsageStatisticsFragment extends Fragment {
             }
         });
     }
+
+
 
     /**
      * Returns the {@link #mRecyclerView} including the time span specified by the

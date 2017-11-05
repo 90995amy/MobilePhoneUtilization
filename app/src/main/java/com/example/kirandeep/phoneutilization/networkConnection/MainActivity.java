@@ -39,27 +39,27 @@ public class MainActivity extends AppCompatActivity
 
         tvPost = (TextView) findViewById(R.id.tv_post);
         mService = new Service();
-        tvPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mService.sendPost("123", "123", new ServiceCallback() {
-                    @Override
-                    public void onSuccess(AsyncTask.Status statusResponse, Object response) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Object response) {
-                        Toast.makeText(getApplicationContext(),response.toString(), Toast.LENGTH_LONG);
-                    }
-
-                    @Override
-                    public void onFailure(Exception exception) {
-
-                    }
-                });
-            }
-        });
+//        tvPost.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mService.sendPost("123", "123", new ServiceCallback() {
+//                    @Override
+//                    public void onSuccess(AsyncTask.Status statusResponse, Object response) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Object response) {
+//                        Toast.makeText(getApplicationContext(),response.toString(), Toast.LENGTH_LONG);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Exception exception) {
+//
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override

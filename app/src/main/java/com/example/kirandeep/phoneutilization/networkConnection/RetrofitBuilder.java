@@ -38,7 +38,7 @@ public class RetrofitBuilder {
                         Request.Builder builder = chain.request().newBuilder();
                         //builder.addHeader("Authorization", getAuth());
                         //builder.addHeader("Authorization", "Basic Ytpi");
-                        //builder.addHeader("Accept", "application/json");
+                        builder.addHeader("Accept", "application/json");
                         Request request = builder.build();
                         return chain.proceed(request);
                     }

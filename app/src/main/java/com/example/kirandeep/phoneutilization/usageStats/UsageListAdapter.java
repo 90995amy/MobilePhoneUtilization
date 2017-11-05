@@ -1,6 +1,8 @@
 package com.example.kirandeep.phoneutilization.usageStats;
 
+import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,8 +32,13 @@ public class UsageListAdapter extends RecyclerView.Adapter<UsageListAdapter.View
 
 private List<CustomUsageStats> mCustomUsageStatsList = new ArrayList<>();
 private DateFormat mDateFormat = new SimpleDateFormat();
+    private Context applicationContext;
 
-/**
+    public UsageListAdapter(Context applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    /**
  * Provide a reference to the type of views that you are using (custom ViewHolder)
  */
 public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,30 +93,36 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
     private void updateLocalDb(final List<CustomUsageStats> mCustomUsageStatsList) {
         final StatsModel statsModel = new StatsModel();
         Realm realm = Realm.getDefaultInstance();
+        final String androidId = Settings.Secure.getString(applicationContext.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
         for (final CustomUsageStats customUsageStats : mCustomUsageStatsList){
-            if(realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()) == null){
+            if(realm.where(StatsModel.class).equalTo("app" +
+                    "Name", customUsageStats.usageStats.getPackageName()) == null){
                 realm.executeTransaction(new Realm.Transaction() {
 
                     @Override
                     public void execute(Realm realm) {
-                        statsModel.setPackageName(customUsageStats.usageStats.getPackageName());
-                        statsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
-                        statsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
-                        statsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
-                        statsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
+                        statsModel.setDeviceId(androidId);
+                        statsModel.setAppName(customUsageStats.usageStats.getPackageName());
+                        statsModel.setLastTimeUsed(String.valueOf(customUsageStats.usageStats.getLastTimeUsed()));
+                        statsModel.setFirstTimestamp(String.valueOf(customUsageStats.usageStats.getFirstTimeStamp()));
+                        statsModel.setLastTimestamp(String.valueOf(customUsageStats.usageStats.getLastTimeStamp()));
+                        statsModel.setTotalTimeInForeground(String.valueOf(customUsageStats.usageStats.getTotalTimeInForeground()));
                     }
                 });
-                Log.i("New Entry", statsModel.getPackageName());
+                Log.i("New Entry", statsModel.getAppName());
             }
             else
             {
                 final StatsModel oldStatsModel = new StatsModel();
-                oldStatsModel.setFirstTimestamp(customUsageStats.usageStats.getFirstTimeStamp());
-                oldStatsModel.setLastTimestamp(customUsageStats.usageStats.getLastTimeStamp());
-                oldStatsModel.setLastTimeUsed(customUsageStats.usageStats.getLastTimeUsed());
-                oldStatsModel.setTotalTimeInForeground(customUsageStats.usageStats.getTotalTimeInForeground());
-                oldStatsModel.setPackageName(customUsageStats.usageStats.getPackageName());
-                //realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getPackageName()).findFirst();
+                oldStatsModel.setDeviceId(androidId);
+                oldStatsModel.setFirstTimestamp(String.valueOf(customUsageStats.usageStats.getFirstTimeStamp()));
+                oldStatsModel.setLastTimestamp(String.valueOf(customUsageStats.usageStats.getLastTimeStamp()));
+                oldStatsModel.setLastTimeUsed(String.valueOf(customUsageStats.usageStats.getLastTimeUsed()));
+                oldStatsModel.setTotalTimeInForeground(String.valueOf(customUsageStats.usageStats.getTotalTimeInForeground()));
+                oldStatsModel.setAppName(customUsageStats.usageStats.getPackageName());
+                //realm.where(StatsModel.class).equalTo("packageName", customUsageStats.usageStats.getAppName()).findFirst();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -117,7 +130,7 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
                         realm.copyToRealmOrUpdate(oldStatsModel);
                     }
                 });
-                Log.i("Update", oldStatsModel.getPackageName());
+                Log.i("Update", oldStatsModel.getAppName());
 
                 QueryRepository m = new QueryRepository();
                 Log.i("Committed", m.getAllStats().toString());
